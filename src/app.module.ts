@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TodoModule } from './todo/todo.module';
 
 @Module({
-  imports: [TodoModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(), // Loads environment variables
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/todo-app'), // Uses the MongoDB URL from .env or a default value
+    TodoModule,
+  ],
 })
 export class AppModule {}
