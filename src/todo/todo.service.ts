@@ -26,7 +26,7 @@ export class TodoService {
 
   //update todo
   async update(id: string, completed: boolean): Promise<Todo> {
-    const updatedTodo = await this.todoModel.findByIdAndUpdate(id, { completed }, { new: true }).exec();
+    const updatedTodo = await this.todoModel.findByIdAndUpdate(id, { completed }, { new: true });
     if (!updatedTodo) throw new NotFoundException('Todo not found');
     return updatedTodo;
   }
