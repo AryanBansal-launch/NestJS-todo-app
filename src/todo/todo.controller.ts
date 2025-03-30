@@ -6,7 +6,8 @@ import {
     Delete, 
     Param, 
     Body, 
-    HttpException 
+    HttpException, 
+    NotFoundException
   } from '@nestjs/common';
   import { TodoService } from './todo.service';
   import { CreateTodoDto } from './dto/create-todo.dto';
@@ -26,7 +27,7 @@ import {
     @Get(':id')
     async getTodoById(@Param('id') id: string) {
       const todo = await this.todoService.getById(id);
-      if (!todo) throw new HttpException('Todo not found', 404);
+      if (!todo) throw new NotFoundException('Todo not found');
       return { message: 'Todo retrieved successfully', data: todo };
     }
   
