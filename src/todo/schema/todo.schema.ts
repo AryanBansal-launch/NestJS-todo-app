@@ -1,5 +1,5 @@
 import { Schema } from "@nestjs/mongoose";
-import { Prop } from "@nestjs/mongoose";
+import { Prop, SchemaFactory } from "@nestjs/mongoose";
 
 @Schema()
 export class Todo {
@@ -9,3 +9,5 @@ export class Todo {
     @Prop({ default: false })
     completed: boolean;
 }
+
+export const TodoSchema = SchemaFactory.createForClass(Todo);
