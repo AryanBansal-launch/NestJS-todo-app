@@ -5,11 +5,23 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
+import envConfig from './config/env.config';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Loads environment variables
-    MongooseModule.forRoot(process.env.MONGO_URI || ' '), TodoModule,  
+    ConfigModule.forRoot({
+      load: [envConfig],
+      isGlobal: true,
+    }
+    ), 
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule], // Ensure ConfigModule is available
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('database', ' '), // Fetch MONGO_URI
+      }),
+      inject: [ConfigService], // Inject ConfigService
+    }), TodoModule,  
   ],
   controllers: [AppController],
   providers: [AppService],

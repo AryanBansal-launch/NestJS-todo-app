@@ -2,10 +2,11 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Todo } from '../schema/todo.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TodoService {
-  constructor(@InjectModel(Todo.name) private todoModel: Model<Todo>) {}
+  constructor(@InjectModel(Todo.name) private todoModel: Model<Todo> ,private configService: ConfigService) {}
 
   //get all todos
   async getAll():Promise<Todo[]> {
