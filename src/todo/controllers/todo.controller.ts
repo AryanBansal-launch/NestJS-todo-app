@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { Todo } from './schema/todo.schema';
-import { TodoService } from './todo.service';
-import { CreateTodoDto } from './dto/create-todo.dto'; 
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Todo } from '../schema/todo.schema';
+import { TodoService } from '../service/todo.service';
+import { CreateTodoDto } from '../dto/create-todo.dto'; 
+import { UpdateTodoDto } from '../dto/update-todo.dto';
 import { NotFoundException } from '@nestjs/common';
 import { Get, Post, Body, Param, Delete, Patch, Put } from '@nestjs/common';
 

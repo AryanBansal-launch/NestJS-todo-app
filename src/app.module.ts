@@ -9,7 +9,7 @@ import { TodoModule } from './todo/todo.module';
 @Module({
   imports: [
     ConfigModule.forRoot(), // Loads environment variables
-    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/todo-app'), TodoModule,  
+    MongooseModule.forRoot(process.env.MONGO_URI || ' '), TodoModule,  
   ],
   controllers: [AppController],
   providers: [AppService],
