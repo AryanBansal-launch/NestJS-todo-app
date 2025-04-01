@@ -2,18 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TodoService } from './todo.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
+import { todo } from 'node:test';
+import { Todo } from '../schema/todo.schema';
+import {Model } from 'mongoose';
 
 describe('TodoService', () => {
-  let service: TodoService;
+  let todoservice: TodoService;
+  let todomodel: Model<Todo>;
 
-  // Mock Mongoose Model
-  const mockTodoModel = {
-    create: jest.fn(),
-    find: jest.fn(),
-    findById: jest.fn(),
-    findByIdAndUpdate: jest.fn(),
-    findByIdAndDelete: jest.fn(),
-  };
 
   // Mock ConfigService
   const mockConfigService = {
@@ -26,6 +22,13 @@ describe('TodoService', () => {
   };
 
   beforeEach(async () => {
+    const mockTodoModel = {
+      create: jest.fn(),
+      find: jest.fn(),
+      findById: jest.fn(),
+      findByIdAndUpdate: jest.fn(),
+      findByIdAndDelete: jest.fn(),
+    };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TodoService,
@@ -40,10 +43,12 @@ describe('TodoService', () => {
       ],
     }).compile();
 
-    service = module.get<TodoService>(TodoService);
+    todoservice = module.get<TodoService>(TodoService);
+    todomodel=module.get<Model<Todo>>(getModelToken(Todo.name));
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(todoservice).toBeDefined();
   });
+
 });

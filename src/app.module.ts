@@ -16,11 +16,11 @@ import { ConfigService } from '@nestjs/config';
     }
     ), 
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], // Ensure ConfigModule is available
+      imports: [ConfigModule], 
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('database', ' '), // Fetch MONGO_URI
+        uri: configService.get<string>('database', ' '), 
       }),
-      inject: [ConfigService], // Inject ConfigService
+      inject: [ConfigService], 
     }), TodoModule,  
   ],
   controllers: [AppController],
