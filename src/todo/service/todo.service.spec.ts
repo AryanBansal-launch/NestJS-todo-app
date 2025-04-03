@@ -2,15 +2,21 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TodoService } from './todo.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { todo } from 'node:test';
+import { mock, todo } from 'node:test';
 import { Todo } from '../schema/todo.schema';
 import {Model } from 'mongoose';
+import { NotFoundException } from '@nestjs/common';
 
 describe('TodoService', () => {
   let todoservice: TodoService;
   let todomodel: Model<Todo>;
 
 
+  const mocktodo={
+    _id:'5f8d9f4d2a1c7c1e1d1a',
+    title:'test',
+    completed:false
+  }
   // Mock ConfigService
   const mockConfigService = {
     get: jest.fn().mockImplementation((key: string) => {
@@ -51,4 +57,49 @@ describe('TodoService', () => {
     expect(todoservice).toBeDefined();
   });
 
+  describe('getAll',()=>{
+    it('should return all todos',async()=>{
+      jest.spyOn(todomodel,'find').mockResolvedValue([mocktodo]);
+      const todos=await todoservice.getAll();
+      expect(todos).toEqual([mocktodo]);
+    })
+  })
+
+  describe('getById',()=>{
+    it('should return a todo by id',async ()=>{
+      jest.spyOn(todomodel,'findById').mockResolvedValue(mocktodo);
+      const todo=await todoservice.getById(mocktodo._id);
+      if(!todo)throw new NotFoundException('Todo Not found');
+      expect(todomodel.findById).toHaveBeenCalledWith(mocktodo._id);
+      expect(todo).toEqual(mocktodo);
+    })
+  })
+
+  describe('create',()=>{
+    it('should create a todo',async ()=>{
+      jest.spyOn(todomodel,'create').mockResolvedValue(mocktodo as any);
+      const todo=await todoservice.create('test');
+      expect(todomodel.create).toHaveBeenCalledWith({title:'test'});
+      expect(todo).toEqual(mocktodo);
+    })
+  })
+
+  describe('update',()=>{
+    it('should update a todo',async ()=>{
+      const updatedtodo={...mocktodo,completed:true};
+      jest.spyOn(todomodel,'findByIdAndUpdate').mockResolvedValue(updatedtodo as any);
+      const todo=await todoservice.update(mocktodo._id,true);
+      expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(mocktodo._id,{completed:true},{new:true});
+      expect(todo).toEqual(updatedtodo);
+    })
+  })
+
+  describe('delete',()=>{
+    it('should delete a todo',async ()=>{
+      jest.spyOn(todomodel,'findByIdAndDelete').mockResolvedValue(mocktodo as any);
+      const todo=await todoservice.delete(mocktodo._id);
+      expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith(mocktodo._id);
+      expect(todo).toEqual(mocktodo);
+    })
+  })
 });
