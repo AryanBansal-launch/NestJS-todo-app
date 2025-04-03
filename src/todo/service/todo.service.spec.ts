@@ -65,6 +65,33 @@ describe('TodoService', () => {
     })
   })
 
+  describe('getCompleted', () => {
+    it('should return all completed todos', async () => {
+      const completedTodos = [{ _id: '1', title: 'Completed Task', completed: true }];
+  
+      jest.spyOn(todomodel, 'find').mockReturnValue(completedTodos as any);
+  
+      const todos = await todoservice.getcompleted();
+  
+      expect(todomodel.find).toHaveBeenCalledWith({ completed: true });
+      expect(todos).toEqual(completedTodos);
+    });
+  });
+  
+  describe('getNonCompleted', () => {
+    it('should return all non-completed todos', async () => {
+      const nonCompletedTodos = [{ _id: '2', title: 'Incomplete Task', completed: false }];
+  
+      jest.spyOn(todomodel, 'find').mockReturnValue(nonCompletedTodos as any);
+  
+      const todos = await todoservice.getNoncompleted();
+  
+      expect(todomodel.find).toHaveBeenCalledWith({ completed: false });
+      expect(todos).toEqual(nonCompletedTodos);
+    });
+  });
+  
+
   describe('getById',()=>{
     it('should return a todo by id',async ()=>{
       jest.spyOn(todomodel,'findById').mockResolvedValue(mocktodo);
