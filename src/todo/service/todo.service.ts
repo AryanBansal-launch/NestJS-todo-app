@@ -8,9 +8,19 @@ import { ConfigService } from '@nestjs/config';
 export class TodoService {
   constructor(@InjectModel(Todo.name) private todoModel: Model<Todo> ,private configService: ConfigService) {}
 
-  //get all todos
+  //get all todos 
   async getAll():Promise<Todo[]> {
     return await this.todoModel.find();
+  }
+
+  //get all completed todos
+  async getcompleted():Promise<Todo[]>{
+    return await this.todoModel.find({completed:true});
+  }
+
+  //get all non completed todos
+  async getNoncompleted():Promise<Todo[]>{
+    return await this.todoModel.find({completed:false});
   }
 
   //get todo by id
