@@ -11,7 +11,7 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   // REST GET call on /todos get all todos
-  @Get('all')
+  @Get()
   async getAllTodos(@Query('status') status?: string) {
     if (status === 'completed') {
       return await this.todoService.getcompleted();
@@ -24,9 +24,12 @@ export class TodoController {
   //REST GET call on /todos/id get todo by id
   @Get(':id')
   async getTodoById(@Param('id') id: String) {
-    const todo = await this.todoService.getById(id);
-    // if (!todo) throw new NotFoundException('Todo not found');
-    return todo;
+    try {
+      const todo = await this.todoService.getById(id);
+      return todo;
+    } catch (e) {
+      return { status: e.status, message: e.response.message };
+    }
   }
 
   //REST POST create call on /todos create todo
@@ -39,19 +42,25 @@ export class TodoController {
   //REST PUT update call on /todos/id update by id
   @Put(':id')
   async updateTodo(@Param('id') id: String, @Body() todobody: UpdateTodoDto) {
-    const updatedtodo = await this.todoService.update(
-      id,
-      todobody.completed ?? false,
-    );
-    // if (!updatedtodo) throw new NotFoundException('Todo not found');
-    return updatedtodo;
+    try {
+      const updatedtodo = await this.todoService.update(
+        id,
+        todobody.completed ?? false,
+      );
+      return updatedtodo;
+    } catch (e) {
+      return { status: e.status, message: e.response.message };
+    }
   }
 
   //REST DELETE delete call on /todos/id delete todo by Id
   @Delete(':id')
   async deleteTodo(@Param('id') id: String) {
-    const deletedTodo = await this.todoService.delete(id);
-    // if (!deletedTodo) throw new NotFoundException('Todo not found');
-    return deletedTodo;
+    try {
+      const deletedTodo = await this.todoService.delete(id);
+      return deletedTodo;
+    } catch (error) {
+      return { status: error.status, message: error.response.message };
+    }
   }
 }
