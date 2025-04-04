@@ -2,7 +2,7 @@ import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } fro
 export class CreateTodoDto {
     @IsNotEmpty()
     @IsString()
-    @MinLength(1)
+    @MinLength(5)
     @MaxLength(100)
     title: string;
 
