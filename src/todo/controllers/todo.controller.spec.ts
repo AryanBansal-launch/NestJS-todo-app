@@ -63,9 +63,17 @@ describe('TodoController', () => {
         expect(todoservice.getById).toHaveBeenCalledWith(mockTodo._id);
         expect(todo).toEqual(mockTodo);
       })
-      it('should throw not found exception',async ()=>{
-        await expect(todocontroller.getTodoById('1234567890')).rejects.toThrow(NotFoundException);
-      })
+      it('should handle errors gracefully', async () => {
+        mockTodoservice.getById.mockRejectedValue({
+          status: 404,
+          response: { message: 'Not Found' },
+        });
+  
+        expect(await todocontroller.getTodoById('999')).toEqual({
+          status: 404,
+          message: 'Not Found',
+        });
+      });
     });
 
     describe('createTodo',()=>{
@@ -79,8 +87,6 @@ describe('TodoController', () => {
     describe('updateTodo', () => {
       it('should update a todo', async () => {
         const updatedTodo = { ...mockTodo, completed: true };
-    
-        // Fix: Ensure mock service returns updated todo
         mockTodoservice.update.mockResolvedValue(updatedTodo);
     
         const todo = await todocontroller.updateTodo(mockTodo._id, { completed: true });
@@ -88,15 +94,20 @@ describe('TodoController', () => {
         expect(todoservice.update).toHaveBeenCalledWith(mockTodo._id, true);
     
         expect(todo).toEqual(
-          updatedTodo, // Now correctly matching the mock return value
+          updatedTodo, 
         );
       });
     
-      it('should throw not found exception', async () => {
-        // Fix: Ensure mock service returns null for nonexistent ID
-        mockTodoservice.update.mockResolvedValue(null);
-    
-        await expect(todocontroller.updateTodo('1234567890', { completed: true })).rejects.toThrow(NotFoundException);
+      it('should handle errors during update', async () => {
+        mockTodoservice.update.mockRejectedValue({
+          status: 404,
+          response: { message: 'Not Found' },
+        });
+  
+        expect(await todocontroller.updateTodo('999', { completed: true })).toEqual({
+          status: 404,
+          message: 'Not Found',
+        });
       });
     });
 
@@ -106,9 +117,16 @@ describe('TodoController', () => {
         expect(todoservice.delete).toHaveBeenCalledWith(mockTodo._id);
         expect(todo).toEqual(mockTodo);
       })
-      it('should throw not found exception',async ()=>{
-        mockTodoservice.delete.mockResolvedValue(null);
-        await expect(todocontroller.deleteTodo('1234567890')).rejects.toThrow(NotFoundException);
-      })
+      it('should handle errors during delete', async () => {
+        mockTodoservice.delete.mockRejectedValue({
+          status: 404,
+          response: { message: 'Not Found' },
+        });
+  
+        expect(await todocontroller.deleteTodo('999')).toEqual({
+          status: 404,
+          message: 'Not Found',
+        });
+      });
     })
   });
