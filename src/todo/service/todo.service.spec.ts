@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoService } from './todo.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { ConfigService } from '@nestjs/config';
-import { mock, todo } from 'node:test';
 import { Todo } from '../schema/todo.schema';
 import {Model } from 'mongoose';
 import { NotFoundException } from '@nestjs/common';
@@ -17,15 +15,6 @@ describe('TodoService', () => {
     title:'test',
     completed:false
   }
-  // Mock ConfigService
-  const mockConfigService = {
-    get: jest.fn().mockImplementation((key: string) => {
-      const envs = {
-        'mongo.uri': 'mongodb://localhost:27017/test-db', 
-      };
-      return envs[key];
-    }),
-  };
 
   beforeEach(async () => {
     const mockTodoModel = {
@@ -41,10 +30,6 @@ describe('TodoService', () => {
         {
           provide: getModelToken('Todo'),
           useValue: mockTodoModel, 
-        },
-        {
-          provide: ConfigService,
-          useValue: mockConfigService, 
         },
       ],
     }).compile();

@@ -1,10 +1,6 @@
-import { mock } from 'node:test';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoController } from './todo.controller';
-import { Todo } from '../schema/todo.schema';
 import { TodoService } from '../service/todo.service';
-import { NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 describe('TodoController', () => {
   let todocontroller: TodoController;
@@ -35,10 +31,8 @@ describe('TodoController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TodoController],
-      providers: [{ provide: TodoService, useValue: mockTodoservice },{
-        provide: ConfigService,
-        useValue: mockConfigService, 
-      }],
+      providers: [{ provide: TodoService, useValue: mockTodoservice },
+      ],
     }).compile();
 
     todocontroller = module.get<TodoController>(TodoController);
