@@ -9,7 +9,7 @@ describe('TodoController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule], // include TodoModule in AppModule
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -35,6 +35,28 @@ describe('TodoController (e2e)', () => {
 
   it('GET /todos - get all todos', async () => {
     const res = await request(app.getHttpServer()).get('/todos');
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('GET /todos/:id - get todo by id', async () => {
+    const res = await request(app.getHttpServer()).get(`/todos/${todoId}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('_id', todoId);
+    expect(res.body).toHaveProperty('title', 'Integration Test Todo 2');
+  });
+  it('GET /todos?status=completed - get completed todos', async () => {
+    const res = await request(app.getHttpServer()).get(
+      '/todos?status=completed',
+    );
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+  it('GET /todos?status=non-completed - get non-completed todos', async () => {
+    const res = await request(app.getHttpServer()).get(
+      '/todos?status=non-completed',
+    );
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
