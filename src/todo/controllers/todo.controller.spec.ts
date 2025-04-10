@@ -81,7 +81,7 @@ describe('todoController', () => {
     
         const todo = await todoController.updateTodo(mockTodo._id, { completed: true });
     
-        expect(todoservice.update).toHaveBeenCalledWith(mockTodo._id, true);
+        expect(todoservice.update).toHaveBeenCalledWith(mockTodo._id, { completed: true });
     
         expect(todo).toEqual(
           updatedTodo, 
