@@ -3,7 +3,6 @@ import { TodoService } from '../service/todo.service';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { UpdateTodoDto } from '../dto/update-todo.dto';
 import { Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { stat } from 'fs';
 
 @Controller('todos')
 export class TodoController {
