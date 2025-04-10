@@ -3,8 +3,8 @@ import { TodoController } from './todo.controller';
 import { TodoService } from '../service/todo.service';
 import { NotFoundException } from '@nestjs/common';
 
-describe('TodoController', () => {
-  let todocontroller: TodoController;
+describe('todoController', () => {
+  let todoController: TodoController;
   let todoservice:TodoService;
 
   const mockTodo = {
@@ -12,7 +12,7 @@ describe('TodoController', () => {
     title: 'test',
     completed: false,
   };
-  const mockTodoservice = {
+  const mockTodoService = {
     getAll: jest.fn().mockResolvedValue([mockTodo]),
     getById: jest.fn().mockImplementation((id) => {
       return id === mockTodo._id ? Promise.resolve(mockTodo) : Promise.resolve(null);
@@ -32,21 +32,21 @@ describe('TodoController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TodoController],
-      providers: [{ provide: TodoService, useValue: mockTodoservice },
+      providers: [{ provide: TodoService, useValue: mockTodoService },
       ],
     }).compile();
 
-    todocontroller = module.get<TodoController>(TodoController);
+    todoController = module.get<TodoController>(TodoController);
     todoservice = module.get<TodoService>(TodoService);
   });
 
   it('should be defined', () => {
-    expect(todocontroller).toBeDefined();
+    expect(todoController).toBeDefined();
   });
 
   describe('getAllTodos', () => {
     it('should return all todos', async () => {
-      const todos=await todocontroller.getAllTodos();
+      const todos=await todoController.getAllTodos();
       expect(todoservice.getAll).toHaveBeenCalled();
       expect(todos).toEqual([mockTodo]);
     })
@@ -54,21 +54,21 @@ describe('TodoController', () => {
 
     describe('getTodoById', () => {
       it('should return a todo',async ()=>{
-        const todo=await todocontroller.getTodoById(mockTodo._id);
+        const todo=await todoController.getTodoById(mockTodo._id);
         expect(todoservice.getById).toHaveBeenCalledWith(mockTodo._id);
         expect(todo).toEqual(mockTodo);
       })
       it('should throw NotFoundException when todo not found by id', async () => {
-        mockTodoservice.getById.mockRejectedValue(new NotFoundException('Todo not found'));
+        mockTodoService.getById.mockRejectedValue(new NotFoundException('Todo not found'));
       
-        await expect(todocontroller.getTodoById('invalidId')).rejects.toThrow(NotFoundException);
+        await expect(todoController.getTodoById('invalidId')).rejects.toThrow(NotFoundException);
       });
       
     });
 
     describe('createTodo',()=>{
       it('should create a todo',async ()=>{
-        const todo=await todocontroller.createTodo({title:'test'});
+        const todo=await todoController.createTodo({title:'test'});
         expect(todoservice.create).toHaveBeenCalledWith('test');
         expect(todo).toEqual(mockTodo);
       })
@@ -77,9 +77,9 @@ describe('TodoController', () => {
     describe('updateTodo', () => {
       it('should update a todo', async () => {
         const updatedTodo = { ...mockTodo, completed: true };
-        mockTodoservice.update.mockResolvedValue(updatedTodo);
+        mockTodoService.update.mockResolvedValue(updatedTodo);
     
-        const todo = await todocontroller.updateTodo(mockTodo._id, { completed: true });
+        const todo = await todoController.updateTodo(mockTodo._id, { completed: true });
     
         expect(todoservice.update).toHaveBeenCalledWith(mockTodo._id, true);
     
@@ -90,23 +90,23 @@ describe('TodoController', () => {
     
       it('should throw NotFoundException when updating a non-existent todo', async () => {
         const dto = { completed: true };
-        mockTodoservice.update.mockRejectedValue(new NotFoundException('Todo Not found'));
+        mockTodoService.update.mockRejectedValue(new NotFoundException('Todo Not found'));
       
-        await expect(todocontroller.updateTodo('invalidId', dto)).rejects.toThrow(NotFoundException);
+        await expect(todoController.updateTodo('invalidId', dto)).rejects.toThrow(NotFoundException);
       });
       
     });
 
     describe('deleteTodo',()=>{
       it('should delete a todo',async ()=>{
-        const todo=await todocontroller.deleteTodo(mockTodo._id);      
+        const todo=await todoController.deleteTodo(mockTodo._id);      
         expect(todoservice.delete).toHaveBeenCalledWith(mockTodo._id);
         expect(todo).toEqual(mockTodo);
       })
       it('should throw NotFoundException when deleting a non-existent todo', async () => {
-        mockTodoservice.delete.mockRejectedValue(new NotFoundException('Todo Not Found'));
+        mockTodoService.delete.mockRejectedValue(new NotFoundException('Todo Not Found'));
       
-        await expect(todocontroller.deleteTodo('invalidId')).rejects.toThrow(NotFoundException);
+        await expect(todoController.deleteTodo('invalidId')).rejects.toThrow(NotFoundException);
       });
       
     })

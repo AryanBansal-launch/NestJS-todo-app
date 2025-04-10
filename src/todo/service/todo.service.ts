@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Todo } from '../schema/todo.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { UpdateTodoDto } from '../dto/update-todo.dto';
 
 @Injectable()
 export class TodoService {
@@ -30,8 +31,8 @@ export class TodoService {
   }
 
   //update todo
-  async update(id:String,completed:boolean):Promise<Todo>{
-    const todo=await this.todoModel.findByIdAndUpdate(id,{completed},{new:true});
+  async update(id:String,updatebody:UpdateTodoDto):Promise<Todo>{
+    const todo=await this.todoModel.findByIdAndUpdate(id,updatebody,{new:true});
     if(!todo)throw new NotFoundException('Todo Not found');
     return todo;
   }

@@ -99,7 +99,7 @@ describe('TodoService', () => {
       const updatedtodo={...mocktodo1,completed:true};
       // jest.spyOn(todomodel,'findByIdAndUpdate').mockResolvedValue(updatedtodo as any);
       (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedtodo);
-      const todo=await todoservice.update(mocktodo1._id,true);
+      const todo=await todoservice.update(mocktodo1._id, { completed: true });
       expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(mocktodo1._id,{completed:true},{new:true});
       expect(todo).toEqual(updatedtodo);
     })

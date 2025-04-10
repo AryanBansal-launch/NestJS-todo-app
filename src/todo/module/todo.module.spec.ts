@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../app.module';
 import { connect, closeDatabase } from '../../../test/utils/mongo-memory-server'; 
 
-describe('TodoController (API tests)', () => {
+describe('TodoModule (API tests)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {

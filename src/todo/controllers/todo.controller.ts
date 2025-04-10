@@ -34,7 +34,7 @@ export class TodoController {
   async updateTodo(@Param('id') id: String, @Body() todobody: UpdateTodoDto) {
       const updatedtodo = await this.todoService.update(
         id,
-        todobody.completed ?? false,
+        todobody,
       );
       return updatedtodo;
   }
