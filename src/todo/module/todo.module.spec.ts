@@ -7,7 +7,13 @@ import { connect, closeDatabase } from '../../../test/utils/mongo-memory-server'
 
 describe('TodoModule (API tests)', () => {
   let app: INestApplication;
+  let todoId: string;
 
+  //added a function to create a sample todo and use it for tests
+  const sampleTodo= async ()=>{
+    const res=await request(app.getHttpServer()).post('/todos').send({ title: 'Integration Test Todo 2' });
+    todoId = res.body._id;
+  }
   beforeAll(async () => {
     await connect(); 
 
@@ -17,6 +23,8 @@ describe('TodoModule (API tests)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    sampleTodo();
   });
 
   afterAll(async () => {
@@ -24,7 +32,7 @@ describe('TodoModule (API tests)', () => {
     await closeDatabase(); 
   });
 
-  let todoId: string;
+  //remove dependency of below tests on create todo tests
 
   it('POST /todos - create todo', async () => {
     const res = await request(app.getHttpServer())
@@ -33,7 +41,7 @@ describe('TodoModule (API tests)', () => {
 
     expect(res.status).toBe(201);
     expect(res.body.title).toBe('Integration Test Todo 2');
-    todoId = res.body._id;
+    // todoId = res.body._id;
   });
 
   it('GET /todos - get all todos', async () => {
