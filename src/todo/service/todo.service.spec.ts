@@ -10,11 +10,17 @@ describe('TodoService', () => {
   let todomodel: Model<Todo>;
 
 
-  const mocktodo={
+  const mocktodo1={
     _id:'5f8d9f4d2a1c7c1e1d1a',
     title:'test',
     completed:false
   }
+  const mocktodo2={
+    _id:'5f8d9f4d2a1c7c1e1d1b',
+    title:'test2',
+    completed:true
+  }
+  const todo=[mocktodo1,mocktodo2];
 
   beforeEach(async () => {
     const mockTodoModel = {
@@ -44,74 +50,68 @@ describe('TodoService', () => {
 
   describe('getAll',()=>{
     it('should return all todos',async()=>{
-      jest.spyOn(todomodel,'find').mockResolvedValue([mocktodo]);
+      // jest.spyOn(todomodel,'find').mockResolvedValue([mocktodo]);
+      (todomodel.find as jest.Mock).mockResolvedValue(todo);
       const todos=await todoservice.getAll();
-      expect(todos).toEqual([mocktodo]);
+      expect(todos).toEqual(todo);
+    })
+    it('should return all completed todos',async()=>{
+      // jest.spyOn(todomodel,'find').mockResolvedValue([mocktodo]);
+      (todomodel.find as jest.Mock).mockResolvedValue([mocktodo2]);
+      const todos=await todoservice.getAll('completed');
+      expect(todos).toEqual([mocktodo2]);
+    })
+    it('should return all incomplete todos',async()=>{
+      // jest.spyOn(todomodel,'find').mockResolvedValue([mocktodo]);
+      (todomodel.find as jest.Mock).mockResolvedValue([mocktodo1]);
+      const todos=await todoservice.getAll('non-completed');
+      expect(todos).toEqual([mocktodo1]);
     })
   })
 
-  describe('getCompleted', () => {
-    it('should return all completed todos', async () => {
-      const completedTodos = [{ _id: '1', title: 'Completed Task', completed: true }];
   
-      jest.spyOn(todomodel, 'find').mockReturnValue(completedTodos as any);
-  
-      const todos = await todoservice.getcompleted();
-  
-      expect(todomodel.find).toHaveBeenCalledWith({ completed: true });
-      expect(todos).toEqual(completedTodos);
-    });
-  });
-  
-  describe('getNonCompleted', () => {
-    it('should return all non-completed todos', async () => {
-      const nonCompletedTodos = [{ _id: '2', title: 'Incomplete Task', completed: false }];
-  
-      jest.spyOn(todomodel, 'find').mockReturnValue(nonCompletedTodos as any);
-  
-      const todos = await todoservice.getNoncompleted();
-  
-      expect(todomodel.find).toHaveBeenCalledWith({ completed: false });
-      expect(todos).toEqual(nonCompletedTodos);
-    });
-  });
+
   
 
   describe('getById',()=>{
     it('should return a todo by id',async ()=>{
-      jest.spyOn(todomodel,'findById').mockResolvedValue(mocktodo);
-      const todo=await todoservice.getById(mocktodo._id);
+      // jest.spyOn(todomodel,'findById').mockResolvedValue(mocktodo);
+      (todomodel.findById as jest.Mock).mockResolvedValue(mocktodo1);
+      const todo=await todoservice.getById(mocktodo1._id);
       if(!todo)throw new NotFoundException('Todo Not found');
-      expect(todomodel.findById).toHaveBeenCalledWith(mocktodo._id);
-      expect(todo).toEqual(mocktodo);
+      expect(todomodel.findById).toHaveBeenCalledWith(mocktodo1._id);
+      expect(todo).toEqual(mocktodo1);
     })
   })
 
   describe('create',()=>{
     it('should create a todo',async ()=>{
-      jest.spyOn(todomodel,'create').mockResolvedValue(mocktodo as any);
+      // jest.spyOn(todomodel,'create').mockResolvedValue(mocktodo as any);
+      (todomodel.create as jest.Mock).mockResolvedValue(mocktodo1);
       const todo=await todoservice.create('test');
       expect(todomodel.create).toHaveBeenCalledWith({title:'test'});
-      expect(todo).toEqual(mocktodo);
+      expect(todo).toEqual(mocktodo1);
     })
   })
 
   describe('update',()=>{
     it('should update a todo',async ()=>{
-      const updatedtodo={...mocktodo,completed:true};
-      jest.spyOn(todomodel,'findByIdAndUpdate').mockResolvedValue(updatedtodo as any);
-      const todo=await todoservice.update(mocktodo._id,true);
-      expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(mocktodo._id,{completed:true},{new:true});
+      const updatedtodo={...mocktodo1,completed:true};
+      // jest.spyOn(todomodel,'findByIdAndUpdate').mockResolvedValue(updatedtodo as any);
+      (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedtodo);
+      const todo=await todoservice.update(mocktodo1._id,true);
+      expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(mocktodo1._id,{completed:true},{new:true});
       expect(todo).toEqual(updatedtodo);
     })
   })
 
   describe('delete',()=>{
     it('should delete a todo',async ()=>{
-      jest.spyOn(todomodel,'findByIdAndDelete').mockResolvedValue(mocktodo as any);
-      const todo=await todoservice.delete(mocktodo._id);
-      expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith(mocktodo._id);
-      expect(todo).toEqual(mocktodo);
+      // jest.spyOn(todomodel,'findByIdAndDelete').mockResolvedValue(mocktodo as any);
+      (todomodel.findByIdAndDelete as jest.Mock).mockResolvedValue(mocktodo1);
+      const todo=await todoservice.delete(mocktodo1._id);
+      expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith(mocktodo1._id);
+      expect(todo).toEqual(mocktodo1);
     })
   })
 });

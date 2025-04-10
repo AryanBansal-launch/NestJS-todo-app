@@ -8,18 +8,13 @@ export class TodoService {
   constructor(@InjectModel(Todo.name) private todoModel: Model<Todo>) {}
 
   //get all todos 
-  async getAll():Promise<Todo[]> {
+  async getAll(status?:String):Promise<Todo[]> {
+    if (status === 'completed') {
+      return await this.todoModel.find({completed:true});
+    } else if (status === 'non-completed') {
+      return await this.todoModel.find({completed:false});
+    }
     return await this.todoModel.find();
-  }
-
-  //get all completed todos
-  async getcompleted():Promise<Todo[]>{
-    return await this.todoModel.find({completed:true});
-  }
-
-  //get all non completed todos
-  async getNoncompleted():Promise<Todo[]>{
-    return await this.todoModel.find({completed:false});
   }
 
   //get todo by id

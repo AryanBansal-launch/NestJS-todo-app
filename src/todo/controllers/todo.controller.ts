@@ -3,6 +3,7 @@ import { TodoService } from '../service/todo.service';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { UpdateTodoDto } from '../dto/update-todo.dto';
 import { Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { stat } from 'fs';
 
 @Controller('todos')
 export class TodoController {
@@ -11,23 +12,14 @@ export class TodoController {
   // REST GET call on /todos get all todos
   @Get()
   async getAllTodos(@Query('status') status?: string) {
-    if (status === 'completed') {
-      return await this.todoService.getcompleted();
-    } else if (status === 'non-completed') {
-      return await this.todoService.getNoncompleted();
-    }
-    return await this.todoService.getAll();
+    return await this.todoService.getAll(status);
   }
 
   //REST GET call on /todos/id get todo by id
   @Get(':id')
   async getTodoById(@Param('id') id: String) {
-    try {
       const todo = await this.todoService.getById(id);
       return todo;
-    } catch (e) {
-      return { status: e.status, message: e.response.message };
-    }
   }
 
   //REST POST create call on /todos create todo
@@ -40,25 +32,17 @@ export class TodoController {
   //REST PUT update call on /todos/id update by id
   @Put(':id')
   async updateTodo(@Param('id') id: String, @Body() todobody: UpdateTodoDto) {
-    try {
       const updatedtodo = await this.todoService.update(
         id,
         todobody.completed ?? false,
       );
       return updatedtodo;
-    } catch (e) {
-      return { status: e.status, message: e.response.message };
-    }
   }
 
   //REST DELETE delete call on /todos/id delete todo by Id
   @Delete(':id')
   async deleteTodo(@Param('id') id: String) {
-    try {
       const deletedTodo = await this.todoService.delete(id);
       return deletedTodo;
-    } catch (error) {
-      return { status: error.status, message: error.response.message };
-    }
   }
 }
