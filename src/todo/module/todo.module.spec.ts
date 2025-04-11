@@ -9,7 +9,7 @@ describe('TodoModule (API tests)', () => {
   let app: INestApplication;
   let todoId: string;
 
-  //added a function to create a sample todo and use it for tests
+  //added a function to create a sample todo and use it for tests (not ideal)
   const sampleTodo= async ()=>{
     const res=await request(app.getHttpServer()).post('/todos').send({ title: 'Integration Test Todo 2' });
     todoId = res.body._id;
