@@ -1,13 +1,29 @@
+import { App } from 'supertest/types';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TodoModule } from './todo/todo.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { TodoModule } from './todo/module/todo.module';
+import envConfig from './config/env.config';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Loads environment variables
-    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/todo-app'), // Uses the MongoDB URL from .env or a default value
-    TodoModule,
+    ConfigModule.forRoot({
+      load: [envConfig],
+      isGlobal: true,
+    }
+    ), 
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule], 
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('database', ' '), 
+      }),
+      inject: [ConfigService], 
+    }), TodoModule,  
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
