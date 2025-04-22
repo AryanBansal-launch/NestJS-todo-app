@@ -21,6 +21,7 @@ export class TodoService {
   //get todo by id
   async getById(id: String):Promise<Todo> {
     const todo = await this.todoModel.findById(id);
+    console.log(todo);
     if (!todo) throw new NotFoundException('Todo not found');
     return todo;
   }
