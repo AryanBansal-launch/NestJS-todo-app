@@ -1,0 +1,7 @@
+import { IsBoolean, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+
+export class CreateTodoDto {
+    @IsBoolean()
+    @IsOptional()
+    completed?: boolean;
+}
