@@ -3,8 +3,6 @@ import { TodoService } from './todo.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Todo } from '../schema/todo.schema';
 import { Model } from 'mongoose';
-import { CreateTodoDto } from '../dto/create-todo.dto';
-import { UpdateTodoDto } from '../dto/update-todo.dto';
 import { NotFoundException } from '@nestjs/common';
 
 describe('TodoService', () => {
@@ -95,7 +93,35 @@ describe('TodoService', () => {
 
     describe('updateTodo',()=>{
       it('should update a todo',async()=>{
-        
+        const updatedTodo={...mocktodo,completed:true};//updated todo for refernce
+        (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedTodo);
+        const todo=await todoservice.updateTodo('5f8d9f4d2a1c7c1e1d1a',{completed:true});
+        expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith('5f8d9f4d2a1c7c1e1d1a',{completed:true},{new:true});
+        expect(todo).toEqual(updatedTodo);
+      })
+
+      it('should throw a NotFoundException if the todo with particular Id is not found',async()=>{
+        (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(null);
+        await expect(todoservice.updateTodo('nonexistentId',{completed:true})).rejects.toThrow(
+          NotFoundException,
+        );
+        expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith('nonexistentId',{completed:true},{new:true});
+      })
+    })
+
+    describe('deleteTodo',()=>{
+      it('should delete a todo',async()=>{
+        (todomodel.findByIdAndDelete as jest.Mock).mockResolvedValue(mocktodo);
+        const todo=await todoservice.deleteTodo('5f8d9f4d2a1c7c1e1d1a');
+        expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith('5f8d9f4d2a1c7c1e1d1a');
+        expect(todo).toEqual(mocktodo);
+      })
+      it('should throw a NotFoundException if the todo with particular Id is not found',async()=>{
+        (todomodel.findByIdAndDelete as jest.Mock).mockResolvedValue(null);
+        await expect(todoservice.deleteTodo('nonexistentId')).rejects.toThrow(
+          NotFoundException,
+        );
+        expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith('nonexistentId');
       })
     })
   });
