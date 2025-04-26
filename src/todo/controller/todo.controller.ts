@@ -16,7 +16,6 @@ export class TodoController {
     }
 
     //for geting all todos
-
     @Get()
     async getAllTodos(@Query('status') status?:string){
         return await this.todoService.getAllTodos(status);
