@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TodoController } from './todo.controller';
 import { TodoService } from '../service/todo.service';
+import { NotFoundException } from '@nestjs/common';
 
 describe('TodoController', () => {
   let controller: TodoController;
@@ -77,12 +78,40 @@ describe('TodoController', () => {
         expect(result).toEqual(mockTodo);
         expect(service.getTodoById).toHaveBeenCalledWith(mockTodo._id);
       })
-      it('should return null if todo not found', async () => {
-        (service.getTodoById as jest.Mock).mockResolvedValue(null);
-        const result = await controller.getTodoById('');
-        expect(result).toBeNull();
-        expect(service.getTodoById).toHaveBeenCalledWith('');
+      it('should throw NotFoundException when todo not found by id', async () => {
+        mockTodoService.getTodoById.mockRejectedValue(new NotFoundException('Todo not found'));
+      
+        await expect(controller.getTodoById('invalidId')).rejects.toThrow(NotFoundException);
       });
     });
+
+    //update todo
+    describe('updateTodo',()=>{
+      it('should update a todo',async()=>{
+        const updatedTodo={...mockTodo,completed:true};
+        (service.updateTodo as jest.Mock).mockResolvedValue(updatedTodo);
+        const result=await controller.updateTodo(mockTodo._id,{completed:true});
+        expect(result).toEqual(updatedTodo);
+        expect(service.updateTodo).toHaveBeenCalledWith(mockTodo._id,{completed:true});
+      })
+
+      it('should throw NotFoundException when todo not found',async ()=>{
+        (service.updateTodo as jest.Mock).mockRejectedValue(new NotFoundException('Todo not found'));
+        await expect(controller.updateTodo('invalidId',{completed:true})).rejects.toThrow(NotFoundException);
+      })
+    })
+
+    describe('deleteTodo',()=>{
+      it('should delete a todo',async()=>{
+        const result=await controller.deleteTodo(mockTodo._id);
+        expect(result).toEqual(mockTodo);
+        expect(service.deleteTodo).toHaveBeenCalledWith(mockTodo._id);
+      })
+
+      it('should throw NotFoundException when todo not found',async()=>{
+        (service.deleteTodo as jest.Mock).mockRejectedValue(new NotFoundException('Todo not found'));
+        await expect(controller.deleteTodo('invalidId')).rejects.toThrow(NotFoundException);
+      })
+    })
   });
 });
