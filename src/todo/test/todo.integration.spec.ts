@@ -9,7 +9,8 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
-describe('TodoController (e2e)', () => {
+
+describe('TodoController Tests', () => {
   let app: INestApplication;
   let mongod: MongoMemoryServer;
 
@@ -30,13 +31,12 @@ beforeAll(async () => {
     await app.init();
   });
   
-
 //   afterAll(async () => {
+//     await app.close();
 //     await mongoose.connection.dropDatabase();
 //     await mongoose.connection.close();
-//     await mongod.stop();
-//     await app.close();
-//   },20000);
+//     if(mongod)await mongod.stop();
+//   });
 
   it('/todos (POST) - should create a new todo', async () => {
     const newTodo = {
