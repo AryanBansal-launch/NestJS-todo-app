@@ -9,36 +9,35 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 
-
 describe('TodoController Tests', () => {
   let app: INestApplication;
   let mongod: MongoMemoryServer;
 
-beforeAll(async () => {
+  beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
     const mongoUri = mongod.getUri();
-  
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         MongooseModule.forRoot(mongoUri),
-        MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]), 
+        MongooseModule.forFeature([{ name: Todo.name, schema: TodoSchema }]),
       ],
       controllers: [TodoController],
       providers: [TodoService],
     }).compile();
-  
+
     app = moduleFixture.createNestApplication();
     await app.init();
   });
-  
 //   afterAll(async () => {
+//     await app.close();
 //     await app.close();
 //     await mongoose.connection.dropDatabase();
 //     await mongoose.connection.close();
-//     if(mongod)await mongod.stop();
+//     if (mongod) await mongod.stop();
 //   });
 
-  it('/todos (POST) - should create a new todo', async () => {
+  it('/todo (POST) - should create a new todo', async () => {
     const newTodo = {
       title: 'Test Todo',
       completed: false,
@@ -53,7 +52,7 @@ beforeAll(async () => {
     expect(response.body.title).toBe(newTodo.title);
   });
 
-  it('/todos (GET) - should fetch all todos', async () => {
+  it('/todo (GET) - should fetch all todos', async () => {
     const response = await request(app.getHttpServer())
       .get('/todo')
       .expect(200);
@@ -61,7 +60,7 @@ beforeAll(async () => {
     expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('/todos/:id (GET) - should fetch a single todo by ID', async () => {
+  it('/todo/:id (GET) - should fetch a single todo by ID', async () => {
     const newTodo = { title: 'Single Todo', completd: false };
 
     // Create a todo first
@@ -81,6 +80,28 @@ beforeAll(async () => {
     expect(response.body.title).toBe(newTodo.title);
   });
 
+  it('/todo/:id (PUT) - should update a single todo by ID', async () => {
+    const newTodo = { title: 'Single Todo', completd: false };
+    const updateTodo = { completed: true };
+
+    // Create a todo first
+    const createdTodo = await request(app.getHttpServer())
+      .post('/todo')
+      .send(newTodo)
+      .expect(201);
+
+    const todoId = createdTodo.body._id;
+
+    // Fetch the created todo
+    const response = await request(app.getHttpServer())
+      .put(`/todo/${todoId}`)
+      .send(updateTodo)
+      .expect(200);
+
+    expect(response.body).toHaveProperty('_id', todoId);
+    expect(response.body.completed).toBe(updateTodo.completed);
+  });
+
   it('/todo/:id (DELETE) - should delete a todo by ID', async () => {
     const newTodo = { title: 'Todo to Delete', description: 'Will be deleted' };
 
@@ -93,13 +114,9 @@ beforeAll(async () => {
     const todoId = createdTodo.body._id;
 
     // Delete the created todo
-    await request(app.getHttpServer())
-      .delete(`/todo/${todoId}`)
-      .expect(200);
+    await request(app.getHttpServer()).delete(`/todo/${todoId}`).expect(200);
 
     // Try fetching the deleted todo
-    await request(app.getHttpServer())
-      .get(`/todo/${todoId}`)
-      .expect(404);
+    await request(app.getHttpServer()).get(`/todo/${todoId}`).expect(404);
   });
 });
