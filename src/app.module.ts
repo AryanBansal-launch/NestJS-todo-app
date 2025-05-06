@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { TodoModule } from './todo/module/todo.module';
 import envConfig from './config/env.config';
 import { ConfigService } from '@nestjs/config';
+import { TodoService } from './todo/service/todo.service';
+import { TodoController } from './todo/controller/todo.controller';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService], 
     }), TodoModule,  
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, TodoController],
+  providers: [AppService, TodoService],
 })
 export class AppModule {}

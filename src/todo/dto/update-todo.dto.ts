@@ -1,6 +1,7 @@
-import { IsBoolean, IsOptional } from 'class-validator'
+import { IsBoolean, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+
 export class UpdateTodoDto {
     @IsBoolean()
-    @IsOptional()    
+    @IsOptional()
     completed?: boolean;
 }
