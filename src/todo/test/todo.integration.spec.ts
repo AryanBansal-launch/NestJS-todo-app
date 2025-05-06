@@ -7,7 +7,6 @@ import { TodoController } from '../controller/todo.controller';
 import { Todo } from '../schema/todo.schema';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongooseModule } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
 
 describe('TodoController Tests', () => {
   let app: INestApplication;
@@ -29,13 +28,11 @@ describe('TodoController Tests', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
-//   afterAll(async () => {
-//     await app.close();
-//     await app.close();
-//     await mongoose.connection.dropDatabase();
-//     await mongoose.connection.close();
-//     if (mongod) await mongod.stop();
-//   });
+
+  afterAll(async () => {
+    await app.close();
+    await mongod.stop();
+  });
 
   it('/todo (POST) - should create a new todo', async () => {
     const newTodo = {
