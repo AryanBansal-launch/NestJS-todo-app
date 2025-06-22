@@ -4,7 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigService } from '@nestjs/config';
+import { TodoModule } from './todo/module/todo.module';
 import envConfig from './config/env.config';
+import { TodoController } from './todo/controller/todo.controller';
+import { TodoService } from './todo/service/todo.service';
 
 @Module({
   imports: [
@@ -19,8 +22,9 @@ import envConfig from './config/env.config';
       }),
       inject: [ConfigService],
     }),
+    TodoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, TodoController],
+  providers: [AppService, TodoService],
 })
 export class AppModule {}
