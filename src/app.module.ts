@@ -15,15 +15,15 @@ import { TodoController } from './todo/controller/todo.controller';
     ConfigModule.forRoot({
       load: [envConfig],
       isGlobal: true,
-    }
-    ), 
+    }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('database', ' '), 
+        uri: configService.get<string>('database', ' '),
       }),
-      inject: [ConfigService], 
-    }), TodoModule,  
+      inject: [ConfigService],
+    }),
+    TodoModule,
   ],
   controllers: [AppController, TodoController],
   providers: [AppService, TodoService],

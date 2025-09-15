@@ -53,7 +53,7 @@ describe('TodoService Integration Tests', () => {
   describe('createTodo', () => {
     it('should create a new todo', async () => {
       const todoData = { title: 'Test Todo', completed: false };
-      const todo = await service.createTodo(todoData) as TodoDocument;
+      const todo = (await service.createTodo(todoData)) as TodoDocument;
 
       expect(todo).toBeDefined();
       expect(todo.title).toBe(todoData.title);
@@ -93,46 +93,69 @@ describe('TodoService Integration Tests', () => {
 
   describe('getTodoById', () => {
     it('should return a todo by id', async () => {
-      const createdTodo = await service.createTodo({ title: 'Test Todo', completed: false }) as TodoDocument;
-      const foundTodo = await service.getTodoById(createdTodo._id.toString()) as TodoDocument;
+      const createdTodo = (await service.createTodo({
+        title: 'Test Todo',
+        completed: false,
+      })) as TodoDocument;
+      const foundTodo = (await service.getTodoById(
+        createdTodo._id.toString(),
+      )) as TodoDocument;
 
       expect(foundTodo).toBeDefined();
       expect(foundTodo._id.toString()).toBe(createdTodo._id.toString());
     });
 
     it('should throw NotFoundException for non-existent id', async () => {
-      await expect(service.getTodoById('507f1f77bcf86cd799439011')).rejects.toThrow(NotFoundException);
+      await expect(
+        service.getTodoById('507f1f77bcf86cd799439011'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('updateTodo', () => {
     it('should update a todo', async () => {
-      const createdTodo = await service.createTodo({ title: 'Test Todo', completed: false }) as TodoDocument;
-      const updatedTodo = await service.updateTodo(createdTodo._id.toString(), { completed: true }) as TodoDocument;
+      const createdTodo = (await service.createTodo({
+        title: 'Test Todo',
+        completed: false,
+      })) as TodoDocument;
+      const updatedTodo = (await service.updateTodo(
+        createdTodo._id.toString(),
+        { completed: true },
+      )) as TodoDocument;
 
       expect(updatedTodo.completed).toBe(true);
       expect(updatedTodo._id.toString()).toBe(createdTodo._id.toString());
     });
 
     it('should throw NotFoundException when updating non-existent todo', async () => {
-      await expect(service.updateTodo('507f1f77bcf86cd799439011', { completed: true }))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        service.updateTodo('507f1f77bcf86cd799439011', { completed: true }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('deleteTodo', () => {
     it('should delete a todo', async () => {
-      const createdTodo = await service.createTodo({ title: 'Test Todo', completed: false }) as TodoDocument;
-      const deletedTodo = await service.deleteTodo(createdTodo._id.toString()) as TodoDocument;
+      const createdTodo = (await service.createTodo({
+        title: 'Test Todo',
+        completed: false,
+      })) as TodoDocument;
+      const deletedTodo = (await service.deleteTodo(
+        createdTodo._id.toString(),
+      )) as TodoDocument;
 
       expect(deletedTodo._id.toString()).toBe(createdTodo._id.toString());
-      
+
       // Verify the todo is actually deleted
-      await expect(service.getTodoById(createdTodo._id.toString())).rejects.toThrow(NotFoundException);
+      await expect(
+        service.getTodoById(createdTodo._id.toString()),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException when deleting non-existent todo', async () => {
-      await expect(service.deleteTodo('507f1f77bcf86cd799439011')).rejects.toThrow(NotFoundException);
+      await expect(
+        service.deleteTodo('507f1f77bcf86cd799439011'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
-}); 
+});
