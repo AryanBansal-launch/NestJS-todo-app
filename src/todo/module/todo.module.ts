@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TodoController } from '../controller/todo.controller';
 import { TodoService } from '../service/todo.service';
