@@ -7,6 +7,21 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 @Injectable()
 export class TodoService {
+  async createTodo(todobody: CreateTodoDto): Promise<Todo> {
+    return this.createTodofunc(todobody);
+  }
+  async getAllTodos(status: string | undefined): Promise<Todo[]> {
+    return this.getAllTodosfunc(status);
+  }
+  async getTodoById(id: string): Promise<Todo> {
+    return this.getTodoByIdfunc(id);
+  }
+  async updateTodo(id: string, todobody: UpdateTodoDto): Promise<Todo> {
+    return this.updateTodoByIdfunc(id, todobody);
+  }
+  async deleteTodo(id: string): Promise<Todo> {
+    return this.deleteTodoByIdfunc(id);
+  }
   constructor(@InjectModel(Todo.name) private todoModel: Model<Todo>) {}
 
   //Method to create a todo
