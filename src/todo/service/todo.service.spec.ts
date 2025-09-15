@@ -86,8 +86,8 @@ describe('TodoService', () => {
     });
 
     //test for get todo by id
-    describe('getTodoByIdfunc',()=>{
-      it('should return a todo by id',async () =>{
+    describe('getTodoByIdfunc', () => {
+      it('should return a todo by id', async () => {
         (todomodel.findById as jest.Mock).mockResolvedValue(mocktodo);
         const result = await service.getTodoByIdfunc(mocktodo._id);
         expect(todomodel.findById).toHaveBeenCalledWith(mocktodo._id);
@@ -95,45 +95,53 @@ describe('TodoService', () => {
       });
       it('should throw NotFoundException if todo not found', async () => {
         (todomodel.findById as jest.Mock).mockResolvedValue(null);
-        await expect(service.getTodoByIdfunc(mocktodo._id)).rejects.toThrowError(
-          `Todo with id ${mocktodo._id} not found`
-        );
+        await expect(
+          service.getTodoByIdfunc(mocktodo._id),
+        ).rejects.toThrowError(`Todo with id ${mocktodo._id} not found`);
       });
-    })
+    });
 
     //test for update todo by id
-    describe('updateTodoByIdfunc',()=>{
-      it('should update a todo by id', async ()=>{
-        const updatedTodo = { ...mocktodo, completed:true };
-        (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedTodo);
-        const result = await service.updateTodoByIdfunc(mocktodo._id, { completed: true });
-        expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(mocktodo._id, { completed: true }, { new: true });
+    describe('updateTodoByIdfunc', () => {
+      it('should update a todo by id', async () => {
+        const updatedTodo = { ...mocktodo, completed: true };
+        (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(
+          updatedTodo,
+        );
+        const result = await service.updateTodoByIdfunc(mocktodo._id, {
+          completed: true,
+        });
+        expect(todomodel.findByIdAndUpdate).toHaveBeenCalledWith(
+          mocktodo._id,
+          { completed: true },
+          { new: true },
+        );
         expect(result).toEqual(updatedTodo);
-      })
+      });
 
       it('should throw NotFoundException if todo not found', async () => {
         (todomodel.findByIdAndUpdate as jest.Mock).mockResolvedValue(null);
-        await expect(service.updateTodoByIdfunc(mocktodo._id, { completed: true })).rejects.toThrowError(
-          `Todo with id ${mocktodo._id} not found`
-        );
+        await expect(
+          service.updateTodoByIdfunc(mocktodo._id, { completed: true }),
+        ).rejects.toThrowError(`Todo with id ${mocktodo._id} not found`);
       });
-    })
+    });
 
     //test for delete todo by id
-    describe('deleteTodoByIdfunc',()=>{
-      it('should delete a todo by id', async()=>{
+    describe('deleteTodoByIdfunc', () => {
+      it('should delete a todo by id', async () => {
         (todomodel.findByIdAndDelete as jest.Mock).mockResolvedValue(mocktodo);
-        const todo= await service.deleteTodoByIdfunc(mocktodo._id);
+        const todo = await service.deleteTodoByIdfunc(mocktodo._id);
         expect(todomodel.findByIdAndDelete).toHaveBeenCalledWith(mocktodo._id);
-        expect (todo).toEqual(mocktodo);
-      })
+        expect(todo).toEqual(mocktodo);
+      });
 
       it('should throw NotFoundException if todo not found', async () => {
         (todomodel.findByIdAndDelete as jest.Mock).mockResolvedValue(null);
-        await expect(service.deleteTodoByIdfunc(mocktodo._id)).rejects.toThrowError(
-          `Todo with id ${mocktodo._id} not found`
-        );
+        await expect(
+          service.deleteTodoByIdfunc(mocktodo._id),
+        ).rejects.toThrowError(`Todo with id ${mocktodo._id} not found`);
       });
-    })
+    });
   });
 });
