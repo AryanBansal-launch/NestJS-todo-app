@@ -1,29 +1,103 @@
+# NestJS TODO Application
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<p align="center">A modern TODO application built with <a href="http://nestjs.com/" target="_blank">NestJS</a>, <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>, and <a href="https://www.docker.com/" target="_blank">Docker</a>.</p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+- ✅ Create, read, update, and delete TODO items
+- 🔍 Filter TODOs by completion status (complete/incomplete)
+- 🐳 Docker containerization for easy deployment
+- 🗄️ MongoDB database integration
+- 🧪 Comprehensive testing suite
+- 📝 Input validation and error handling
+- 🔧 Environment-based configuration
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🛠️ Tech Stack
+
+- **Framework**: NestJS
+- **Database**: MongoDB with Mongoose
+- **Language**: TypeScript
+- **Containerization**: Docker & Docker Compose
+- **Testing**: Jest
+- **Validation**: Class Validator
+
+## 📋 Prerequisites
+
+Before running this application, make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+- [MongoDB Atlas](https://www.mongodb.com/atlas) account (optional, for cloud database)
+
+## 🚀 Quick Start
+
+### Option 1: Using Docker (Recommended)
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd NestJS-todo-app
+   ```
+
+2. **Configure Environment Variables**
+   
+   Update the `MONGO_URI` in `docker-compose.yml` with your MongoDB Atlas connection string:
+   ```yaml
+   environment:
+     - MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/todo-app
+   ```
+
+3. **Run with Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Access the Application**
+   - API: http://localhost:3000
+   - MongoDB: localhost:27017 (if using local MongoDB)
+
+### Option 2: Local Development
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Set up Environment Variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   MONGO_URI=mongodb://localhost:27017/todo-app
+   PORT=3000
+   ```
+
+3. **Start MongoDB**
+   
+   **Option A: Using Docker**
+   ```bash
+   docker run -d -p 27017:27017 --name mongodb mongo:latest
+   ```
+   
+   **Option B: Local Installation**
+   ```bash
+   # macOS
+   brew tap mongodb/brew
+   brew install mongodb-community
+   brew services start mongodb/brew/mongodb-community
+   ```
+
+4. **Run the Application**
+   ```bash
+   # Development mode
+   npm run start:dev
+   
+   # Production mode
+   npm run start:prod
+   ```
 
 ## Project setup
 

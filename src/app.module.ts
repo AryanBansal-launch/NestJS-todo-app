@@ -1,4 +1,3 @@
-import { App } from 'supertest/types';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -7,8 +6,6 @@ import { AppService } from './app.service';
 import { TodoModule } from './todo/module/todo.module';
 import envConfig from './config/env.config';
 import { ConfigService } from '@nestjs/config';
-import { TodoService } from './todo/service/todo.service';
-import { TodoController } from './todo/controller/todo.controller';
 
 @Module({
   imports: [
@@ -25,7 +22,7 @@ import { TodoController } from './todo/controller/todo.controller';
     }),
     TodoModule,
   ],
-  controllers: [AppController, TodoController],
-  providers: [AppService, TodoService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
