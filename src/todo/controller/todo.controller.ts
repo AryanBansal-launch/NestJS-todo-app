@@ -4,7 +4,7 @@ import { Todo } from '../schema/todo.schema';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { UpdateTodoDto } from '../dto/update-todo.dto';
 import { Get, Post, Body, Param, Delete, Put, Query } from '@nestjs/common';
-@Controller('todo')
+@Controller('todos')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
