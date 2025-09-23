@@ -8,8 +8,10 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
+    env_file:
+      - .env
     environment:
-      - MONGO_URI=mongodb+srv://Bansal29:Bansal%4029@cluster0.findv.mongodb.net/Todo
+      - MONGO_URI=${MONGO_URI}
 
   mongo:
     image: mongo:6
