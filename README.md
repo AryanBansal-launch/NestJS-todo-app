@@ -99,74 +99,325 @@ Before running this application, make sure you have the following installed:
    npm run start:prod
    ```
 
-## Project setup
+## 📚 API Documentation
 
-```bash
-$ npm install
+### Base URL
+```
+http://localhost:3000
 ```
 
-## Compile and run the project
+### Endpoints
 
-```bash
-# development
-$ npm run start
+#### 1. Create a TODO
+```http
+POST /todos
+Content-Type: application/json
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+{
+  "title": "Learn NestJS",
+  "completed": false
+}
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+**Response:**
+```json
+{
+  "_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+  "title": "Learn NestJS",
+  "completed": false,
+  "__v": 0
+}
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+#### 2. Get All TODOs
+```http
+GET /todos
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Query Parameters:**
+- `status` (optional): Filter by completion status
+  - `complete`: Returns only completed TODOs
+  - `incomplete`: Returns only incomplete TODOs
 
-## Resources
+**Examples:**
+```http
+GET /todos                    # Get all TODOs
+GET /todos?status=complete    # Get only completed TODOs
+GET /todos?status=incomplete  # Get only incomplete TODOs
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+**Response:**
+```json
+[
+  {
+    "_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "title": "Learn NestJS",
+    "completed": false,
+    "__v": 0
+  }
+]
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+#### 3. Get TODO by ID
+```http
+GET /todos/:id
+```
 
-## Support
+**Response:**
+```json
+{
+  "_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+  "title": "Learn NestJS",
+  "completed": false,
+  "__v": 0
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### 4. Update TODO
+```http
+PUT /todos/:id
+Content-Type: application/json
 
-## Stay in touch
+{
+  "title": "Learn NestJS Advanced",
+  "completed": true
+}
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Response:**
+```json
+{
+  "_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+  "title": "Learn NestJS Advanced",
+  "completed": true,
+  "__v": 0
+}
+```
 
-## License
+#### 5. Delete TODO
+```http
+DELETE /todos/:id
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Response:**
+```json
+{
+  "_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+  "title": "Learn NestJS Advanced",
+  "completed": true,
+  "__v": 0
+}
+```
+
+### Error Responses
+
+#### 404 Not Found
+```json
+{
+  "statusCode": 404,
+  "message": "Todo with id 64f1a2b3c4d5e6f7g8h9i0j1 not found",
+  "error": "Not Found"
+}
+```
+
+#### 400 Bad Request
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "title should not be empty"
+  ],
+  "error": "Bad Request"
+}
+```
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+# Unit tests
+npm run test
+
+# Watch mode
+npm run test:watch
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+
+# Debug tests
+npm run test:debug
+```
+
+### Test Structure
+- **Unit Tests**: `*.spec.ts` files
+- **E2E Tests**: `test/` directory
+- **Integration Tests**: Service integration tests
+
+## 🏗️ Project Structure
+
+```
+src/
+├── config/
+│   └── env.config.ts          # Environment configuration
+├── todo/
+│   ├── controller/
+│   │   ├── todo.controller.ts  # TODO endpoints
+│   │   └── todo.controller.spec.ts
+│   ├── dto/
+│   │   ├── create-todo.dto.ts   # Create TODO validation
+│   │   └── update-todo.dto.ts   # Update TODO validation
+│   ├── module/
+│   │   └── todo.module.ts       # TODO module configuration
+│   ├── schema/
+│   │   └── todo.schema.ts       # MongoDB schema
+│   ├── service/
+│   │   ├── todo.service.ts      # Business logic
+│   │   └── todo.service.spec.ts
+│   └── test/
+│       └── todo.integration.spec.ts
+├── app.controller.ts            # App controller
+├── app.module.ts               # Root module
+├── app.service.ts              # App service
+└── main.ts                     # Application entry point
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MONGO_URI` | MongoDB connection string | `mongodb://mongo:27017/todo-app` |
+| `PORT` | Application port | `3000` |
+
+### Docker Configuration
+
+The application uses Docker Compose with two services:
+
+- **app**: NestJS application
+- **mongo**: MongoDB database
+
+## 🚀 Deployment
+
+### Docker Deployment
+```bash
+# Build and run
+docker-compose up --build
+
+# Run in background
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+```
+
+### Production Considerations
+- Set up proper MongoDB Atlas cluster
+- Configure environment variables securely
+- Enable HTTPS in production
+- Set up monitoring and logging
+- Configure backup strategies
+
+## 🛠️ Development
+
+### Available Scripts
+
+```bash
+# Development
+npm run start:dev          # Start in development mode with watch
+npm run start:debug        # Start in debug mode
+
+# Building
+npm run build              # Build the application
+npm run start:prod         # Start production build
+
+# Code Quality
+npm run lint               # Run ESLint
+npm run format             # Format code with Prettier
+
+# Testing
+npm run test               # Run unit tests
+npm run test:e2e           # Run e2e tests
+npm run test:cov           # Run tests with coverage
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### 1. MongoDB Connection Error
+```
+MongoParseError: Invalid scheme, expected connection string to start with "mongodb://" or "mongodb+srv://"
+```
+
+**Solution**: Ensure your `MONGO_URI` environment variable is properly set with a valid MongoDB connection string.
+
+#### 2. Docker Connection Refused
+```
+MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017
+```
+
+**Solution**: When using Docker, make sure to use the service name (`mongo:27017`) instead of `localhost:27017`.
+
+#### 3. Dependency Injection Error
+```
+UnknownDependenciesException: Nest can't resolve dependencies of the TodoService (?)
+```
+
+**Solution**: Ensure that `TodoModule` is properly imported in `AppModule` and that services are not duplicated.
+
+### Debug Commands
+
+```bash
+# Check Docker containers
+docker ps
+
+# View application logs
+docker-compose logs -f app
+
+# View MongoDB logs
+docker-compose logs -f mongo
+
+# Check environment variables
+docker-compose exec app env | grep MONGO
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [MongoDB](https://www.mongodb.com/) - NoSQL database
+- [Docker](https://www.docker.com/) - Containerization platform
+- [Mongoose](https://mongoosejs.com/) - MongoDB object modeling for Node.js
+
+## 📞 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Troubleshooting](#-troubleshooting) section
+2. Search existing [Issues](https://github.com/your-username/NestJS-todo-app/issues)
+3. Create a new issue with detailed information
+4. Join the [NestJS Discord](https://discord.gg/G7Qnnhy) community
+
+---
+
+<p align="center">
+  Made with ❤️ using NestJS
+</p>
