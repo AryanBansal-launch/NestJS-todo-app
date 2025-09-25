@@ -1,6 +1,10 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+@Schema()
 export class Todo {
-  id: string;
+  @Prop({ required: true })
   title: string;
-  description: string;
+  @Prop({ default: false })
   completed: boolean;
 }
+export const TodoSchema = SchemaFactory.createForClass(Todo);
