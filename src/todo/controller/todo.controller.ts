@@ -11,7 +11,6 @@ import {
 import { TodoService } from '../service/todo.service';
 import { CreateTodoDto } from '../dto/CreateTodoDTO/create-todo.dto';
 import { UpdateTodoDto } from '../dto/UpdateTodoDTO/update-todo.dto';
-import { Todo } from '../schema/todo.schema';
 
 @Controller('todos')
 export class TodoController {

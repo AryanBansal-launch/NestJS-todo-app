@@ -4,6 +4,8 @@ import { CountModule } from './count/module/count.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import envConfig from './config/env.config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -21,5 +23,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     TodoModule,
     CountModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
