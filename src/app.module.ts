@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TodoModule } from './todo/module/todo.module';
 import { CountModule } from './count/module/count.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import envConfig from './config/env.config';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -13,7 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri: configService.get('database'),
       }),
       inject: [ConfigService],
