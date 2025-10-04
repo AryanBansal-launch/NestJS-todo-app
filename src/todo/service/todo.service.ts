@@ -10,7 +10,7 @@ import { UpdateTodoDto } from '../dto/UpdateTodoDTO/update-todo.dto';
 @Injectable()
 export class TodoService {
   constructor(@InjectModel(Todo.name) private todoModel: Model<Todo>) {}
-  getHealth(): string {
+  getHealth(): string{
     return 'health Check completed';
   }
   //create todo
